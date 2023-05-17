@@ -1,0 +1,55 @@
+<div *ngFor="let room of roomsData" class="room-row">
+  <div class=" row room-details">
+    <div class="col">
+      <h3>{{ room.room_number }}</h3>
+    </div>
+    <div>
+      <p>{{ room.room_type }}</p>
+    </div>
+    <div>
+      <p>{{ room.availability }}</p>
+    </div>
+    <div>
+      <p>{{ room.price}}</p>
+    </div>
+    <div>
+      <p>{{ room.slug }}</p>
+    </div>
+
+    <!-- Display other room details -->
+  </div>
+  <div class="room-actions">
+    <div class="dropdown" mdbDropdownDirective>
+      <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" aria-expanded="false" mdbDropdownToggle (click)="toggleDropdown(room)">
+        <i class="fas fa-ellipsis-v"></i>
+      </button>
+      <ul mdbDropdownMenu class="dropdown-menu" aria-labelledby="dropdownMenuButton" [hidden]="!room.showDropdown">
+        <li><a class="dropdown-item" (click)="updateRoom($event,room)">Update</a></li>
+        <li><a class="dropdown-item" (click)="deleteRoom($event,room)">Delete</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- Add the form for updating a room -->
+<div *ngIf="showUpdateForm" class="update-form">
+  <h3>Update Room</h3>
+  <form [formGroup]="updateRoomForm" (ngSubmit)="submitUpdateForm()">
+    <div>
+      <input type="text" formControlName="room_number" placeholder="Room Number">
+    </div>
+    <div>
+      <input type="text" formControlName="room_type" placeholder="Room Type">
+    </div>
+    <div>
+      <input type="text" formControlName="price" placeholder="Price">
+    </div>
+    <!-- Include other fields as needed -->
+    <div>
+      <input type="text" formControlName="slug" placeholder="Slug" readonly>
+    </div>
+    <div>
+      <button type="submit">Update</button>
+    </div>
+  </form>
+</div>
