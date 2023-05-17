@@ -27,6 +27,7 @@ import { NewRoomComponent } from './admin/views/new-room/new-room.component';
     MdbDropdownModule,
     FormsModule,
     ReactiveFormsModule,
+
   ],
   providers: [],
   bootstrap: [AppComponent]

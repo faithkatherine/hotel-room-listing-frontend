@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { Rooms } from 'src/app/interfaces/rooms';
 import { RoomsService } from 'src/app/services/rooms.service';
-import { MdbModalRef, MdbModalService } from 'mdb-angular-ui-kit/modal';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-room-list',
@@ -10,20 +10,24 @@ import { MdbModalRef, MdbModalService } from 'mdb-angular-ui-kit/modal';
   styleUrls: ['./room-list.component.scss']
 })
 export class RoomListComponent {
-  roomsData: (Rooms & { showDropdown: boolean })[] = [];
   showNewRoomForm: boolean = false;
-  updateRoomForm: FormGroup;
   showUpdateForm = false;
+  updateForm: FormGroup;
+
+  electedFile: File | null = null;
+  roomsData: (Rooms & { showDropdown: boolean; showUpdateForm: boolean; updateForm: FormGroup })[] = [];
+
   selectedFile: File | null = null;
 
   constructor(private roomsService: RoomsService,
-    private formBuilder: FormBuilder,
-    private modalService: MdbModalService) {
-    this.updateRoomForm = this.formBuilder.group({
+    private formBuilder: FormBuilder) {
+    this.updateForm = this.formBuilder.group({
       room_number: ['', Validators.required],
       room_type: ['', Validators.required],
       price: ['', Validators.required],
-      slug: ['']})}
+      availability: ['', Validators.required],
+      room_image: ['']
+    })}
 
   ngOnInit() {
     this.getRoomsData();
@@ -31,7 +35,19 @@ export class RoomListComponent {
 
   getRoomsData() {
     this.roomsService.get_rooms().subscribe(response => {
-      this.roomsData = response.data.map(room => ({ ...room, showDropdown: false }));
+      this.roomsData = response.data.map(room => ({
+        ...room,
+        showDropdown: false,
+        showUpdateForm: false,
+        updateForm: this.formBuilder.group({
+          room_number: [room.room_number, Validators.required],
+          room_type: [room.room_type, Validators.required],
+          availability: [room.availability],
+          price: [room.price, Validators.required],
+          room_image: ['']
+
+        })
+      }));
     });
   }
 
@@ -39,15 +55,8 @@ export class RoomListComponent {
     room.showDropdown = !room.showDropdown;
   }
 
-  updateRoom(event: Event,room: Rooms) {
-    this.showUpdateForm = true;
-    console.log(this.showUpdateForm)
-    this.updateRoomForm.patchValue({
-      room_number: room.room_number,
-      room_type: room.room_type,
-      price: room.price,
-      slug: room.slug
-    });
+  updateRoom(event: Event, room: Rooms & { showUpdateForm: boolean }) {
+    room.showUpdateForm = !room.showUpdateForm;
   }
 
   onFileSelected(event: Event) {
@@ -59,37 +68,36 @@ export class RoomListComponent {
     }
   }
 
-  submitUpdateForm() {
-    if (this.updateRoomForm.valid && this.selectedFile) {
-      const roomData = this.updateRoomForm.value;
+  submitUpdateForm(room: any & { showUpdateForm: boolean }, slug:string) {
+    console.log("Clicked");
+    if (room.updateForm.valid) {
+      const roomData = room.updateForm.value;
+      console.log(roomData);
       const formData = new FormData();
       formData.append('room_number', roomData.room_number);
       formData.append('room_type', roomData.room_type);
       formData.append('availability', roomData.availability);
       formData.append('price', roomData.price);
-      formData.append('room_image', this.selectedFile);
+      if (this.selectedFile) {
+        formData.append('room_image', this.selectedFile);
+      }
 
-      this.roomsService.addRoom(formData).subscribe(
+      console.log(formData)
+
+      this.roomsService.updateRoom(formData, slug).subscribe(
         response => {
-          // Handle the response from the API
           console.log(response);
-          // Reset the form and selected file
-          this.updateRoomForm.reset();
+          this.updateForm.reset();
           this.selectedFile = null;
         },
         error => {
-          // Handle the error response from the API
           console.error(error);
-          // Perform error handling or show error message
         }
       );
     } else {
-      // Mark form controls as touched to display validation errors
-      this.updateRoomForm.markAllAsTouched();
+      this.updateForm.markAllAsTouched();
     }
   }
-
-
 
   validateImageFile(control: AbstractControl): ValidationErrors | null {
     const file = control.value;
@@ -106,8 +114,13 @@ export class RoomListComponent {
   }
 
 
-  deleteRoom(event: Event,room: Rooms) {
-    // Implement delete logic here
+  deleteRoom(event: Event,slug:string) {
+    this.roomsService.deleteRoom(slug).subscribe(response =>{
+      console.log(response);
+    },
+    error => {
+      console.error(error);
+    });
   }
 
 

@@ -53,13 +53,10 @@ export class NewRoomComponent {
           this.selectedFile = null;
         },
         error => {
-          // Handle the error response from the API
           console.error(error);
-          // Perform error handling or show error message
         }
       );
     } else {
-      // Mark form controls as touched to display validation errors
       this.roomForm.markAllAsTouched();
     }
   }

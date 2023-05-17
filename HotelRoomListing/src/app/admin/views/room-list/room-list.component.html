@@ -1,55 +1,56 @@
 <div *ngFor="let room of roomsData" class="room-row">
-  <div class=" row room-details">
+  <div class="row room-details">
     <div class="col">
       <h3>{{ room.room_number }}</h3>
     </div>
-    <div>
+    <div class="col">
       <p>{{ room.room_type }}</p>
     </div>
-    <div>
+    <div class="col">
       <p>{{ room.availability }}</p>
     </div>
-    <div>
-      <p>{{ room.price}}</p>
+    <div class="col">
+      <p>{{ room.price }}</p>
     </div>
-    <div>
+    <div class="col">
       <p>{{ room.slug }}</p>
     </div>
-
-    <!-- Display other room details -->
-  </div>
-  <div class="room-actions">
-    <div class="dropdown" mdbDropdownDirective>
-      <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" aria-expanded="false" mdbDropdownToggle (click)="toggleDropdown(room)">
-        <i class="fas fa-ellipsis-v"></i>
-      </button>
-      <ul mdbDropdownMenu class="dropdown-menu" aria-labelledby="dropdownMenuButton" [hidden]="!room.showDropdown">
-        <li><a class="dropdown-item" (click)="updateRoom($event,room)">Update</a></li>
-        <li><a class="dropdown-item" (click)="deleteRoom($event,room)">Delete</a></li>
-      </ul>
+    <div class=" col room-actions">
+      <div class="dropdown" mdbDropdownDirective>
+        <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" aria-expanded="false" mdbDropdownToggle (click)="toggleDropdown(room)">
+          <i class="fas fa-ellipsis-v"></i>
+        </button>
+        <ul mdbDropdownMenu class="dropdown-menu" aria-labelledby="dropdownMenuButton" [hidden]="!room.showDropdown">
+          <li><a class="dropdown-item" (click)="updateRoom($event, room)">Update</a></li>
+          <li><a class="dropdown-item" (click)="deleteRoom($event, room.slug)">Delete</a></li>
+        </ul>
+      </div>
     </div>
   </div>
-</div>
 
-<!-- Add the form for updating a room -->
-<div *ngIf="showUpdateForm" class="update-form">
-  <h3>Update Room</h3>
-  <form [formGroup]="updateRoomForm" (ngSubmit)="submitUpdateForm()">
-    <div>
-      <input type="text" formControlName="room_number" placeholder="Room Number">
-    </div>
-    <div>
-      <input type="text" formControlName="room_type" placeholder="Room Type">
-    </div>
-    <div>
-      <input type="text" formControlName="price" placeholder="Price">
-    </div>
-    <!-- Include other fields as needed -->
-    <div>
-      <input type="text" formControlName="slug" placeholder="Slug" readonly>
-    </div>
-    <div>
-      <button type="submit">Update</button>
-    </div>
-  </form>
+
+  <!-- Add the form for updating a room -->
+  <div *ngIf="room.showUpdateForm" class="update-form">
+    <h3>Update Room</h3>
+    <form [formGroup]="room.updateForm" (ngSubmit)="submitUpdateForm(room, room.slug)">
+      <div>
+        <input type="text" formControlName="room_number" placeholder="Room Number">
+      </div>
+      <div>
+        <input type="text" formControlName="room_type" placeholder="Room Type">
+      </div>
+      <div>
+        <input type="text" formControlName="availability" placeholder="Availability">
+      </div>
+      <div>
+        <input type="text" formControlName="price" placeholder="Price">
+      </div>
+      <div>
+        <input type="file" formControlName="room_image" (change)="onFileSelected">
+      </div>
+      <div>
+        <button type="submit">Update</button>
+      </div>
+    </form>
+  </div>
 </div>
