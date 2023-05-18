@@ -3,8 +3,21 @@
 }
 
 #sidebar {
+  padding: 20px;
+  width: 200px;
+  border: 2px solid #ccc;
   border-radius: 10px;
-  /* Add other styles for the sidebar */
+  height: 100%;
+  margin: 20px;
+  background-color: #705722;
+}
+
+ul.side-menu {
+  list-style-type: none;
+}
+
+ul.side-menu li a {
+  color: #fff;
 }
 
 #content {
@@ -12,8 +25,6 @@
   border-radius: 10px;
 
 }
-
-
 
 .content-container {
   padding: 20px;

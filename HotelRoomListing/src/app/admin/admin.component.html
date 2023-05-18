@@ -1,14 +1,20 @@
-<div class="admin-container">
-  <section id="sidebar" [ngClass]="status ? 'hide' : ''" class="dark">
+<div class="admin-container p-3">
+  <section id="sidebar" [ngClass]="status ? 'hide' : ''" class="dark p-3">
     <ul class="side-menu top">
-      <li>
-          <a routerLink="/admin" routerLinkActive="active">
+      <li class="p-2">
+        <a routerLink="" routerLinkActive="active">
+            <i class='bx bx-upload'></i>
+            <span class="text">Home</span>
+        </a>
+    </li>
+      <li class="p-2">
+          <a routerLink="/dashboard" routerLinkActive="active">
               <i class='bx bxs-dashboard'></i>
               <span class="text">Room List</span>
           </a>
       </li>
-      <li>
-          <a routerLink="/admin/addRoom" routerLinkActive="active">
+      <li class="p-2">
+          <a routerLink="/dashboard/addRoom" routerLinkActive="active">
               <i class='bx bx-upload'></i>
               <span class="text">Add Rooms</span>
           </a>

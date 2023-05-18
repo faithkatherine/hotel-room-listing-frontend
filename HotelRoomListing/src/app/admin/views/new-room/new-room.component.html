@@ -1,20 +1,20 @@
 <form [formGroup]="roomForm" (ngSubmit)="submitForm()" enctype="multipart/form-data">
-  <div>
+  <div class="p-2">
     <input type="text" formControlName="room_number" placeholder="Room Number">
   </div>
-  <div>
+  <div class="p-2">
     <input type="text" formControlName="room_type" placeholder="Room Type">
   </div>
-  <div>
+  <div class="p-2">
     <input type="text" formControlName="availability" placeholder="Availability">
   </div>
-  <div>
+  <div class="p-2">
     <input type="number" formControlName="price" placeholder="Price">
   </div>
-  <div>
+  <div class="p-2">
     <input type="file" formControlName="room_image" (change)="onFileSelected($event)">
   </div>
-  <div>
+  <div class="p-2">
     <button type="submit" [disabled]="roomForm.invalid">Add Room</button>
   </div>
 </form>

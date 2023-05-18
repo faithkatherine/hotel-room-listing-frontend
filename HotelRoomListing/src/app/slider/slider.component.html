@@ -1,0 +1,23 @@
+<div >
+  <ngx-slick-carousel class="carousel slick-slider " #slickModal="slick-carousel" [config]="sliderConfig">
+    <div ngxSlickItem *ngFor="let Data of contentData" class="slick-slide">
+      <div class="card">
+        <div class="bg-image hover-overlay" mdbRipple rippleColor="light">
+          <img [src]="Data.room_image" class="img-fluid"/>
+          <a href="#!">
+            <div class="mask" style="background-color: rgba(251, 251, 251, 0.15);"></div>
+          </a>
+        </div>
+        <div class="card-body">
+          <h6 class="card-title">Room: {{Data.room_number}}</h6>
+          <h3 class="card-text">{{Data.room_type}}</h3>
+          <div class="card-footer" [ngClass]="{ 'available': Data.availability, 'booked': !Data.availability }">
+            <span *ngIf="Data.availability">Available</span>
+            <span *ngIf="!Data.availability">Booked</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ngx-slick-carousel>
+</div>
+

@@ -7,7 +7,7 @@ import { NewRoomComponent } from './admin/views/new-room/new-room.component';
 
 const routes: Routes = [
   { path: '', component:RoomsComponent },
-  { path: 'admin', component:AdminComponent,
+  { path: 'dashboard', component:AdminComponent,
     children: [
       { path: '', component: RoomListComponent },
       { path: 'addRoom',component: NewRoomComponent},
